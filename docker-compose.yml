@@ -1,20 +1,20 @@
 version: '3.8' # Docker Compose file format version
 
 services:
-   openplc:
-      # Build directly from the OpenPLC GitHub repository's master branch
-      build: https://github.com/thiagoralves/OpenPLC_v3.git#master
-      container_name: openplc-controller
-      ports:
-        - "502:502"   # Modbus TCP
-        - "8080:8080" # OpenPLC Web UI
-      volumes:
-        # This maps a host folder to the /docker_persistent volume defined in the official Dockerfile
-        # This ensures your OpenPLC programs and configurations are saved persistently on your VM.
-        - ./openplc_data:/docker_persistent
-      restart: always
-      networks:
-        - scada_net # Connects this container to our custom network
+  openplc:
+    # Build directly from the OpenPLC GitHub repository's master branch
+    build: https://github.com/thiagoralves/OpenPLC_v3.git#master
+    container_name: openplc-controller
+    ports:
+      - "502:502"   # Modbus TCP
+      - "8080:8080" # OpenPLC Web UI
+    volumes:
+      # This maps a host folder to the /docker_persistent volume defined in the official Dockerfile
+      # This ensures your OpenPLC programs and configurations are saved persistently on your VM.
+      - ./openplc_data:/docker_persistent
+    restart: always
+    networks:
+      - scada_net # Connects this container to our custom network
 
   scadabr:
     build:
