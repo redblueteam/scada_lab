@@ -1,5 +1,3 @@
-version: '3.8' # Docker Compose file format version
-
 services:
   openplc:
     # Build directly from the OpenPLC GitHub repository's master branch
