@@ -1,20 +1,20 @@
 version: '3.8' # Docker Compose file format version
 
 services:
-  openplc:
-    build:
-      context: ./openplc # Dockerfile folder for OpenPLC
-    container_name: openplc-controller # A friendly name for the container
-    ports:
-      - "502:502"   # Map host port 502 to container port 502 (for Modbus TCP)
-      - "8080:8080" # Map host port 8080 to container port 8080 (for OpenPLC Web UI)
-    volumes:
-      # It maps a folder on your VM (`./openplc_data`) to a folder inside the container.
-      # This means your PLC programs and settings will be saved even if the container is removed/recreated.
-      - ./openplc_data:/opt/OpenPLC_v3/data
-    restart: always # Automatically restart the container if it crashes or the VM reboots
-    networks:
-      - scada_net # Connects this container to our custom network
+   openplc:
+      # Build directly from the OpenPLC GitHub repository's master branch
+      build: https://github.com/thiagoralves/OpenPLC_v3.git#master
+      container_name: openplc-controller
+      ports:
+        - "502:502"   # Modbus TCP
+        - "8080:8080" # OpenPLC Web UI
+      volumes:
+        # This maps a host folder to the /docker_persistent volume defined in the official Dockerfile
+        # This ensures your OpenPLC programs and configurations are saved persistently on your VM.
+        - ./openplc_data:/docker_persistent
+      restart: always
+      networks:
+        - scada_net # Connects this container to our custom network
 
   scadabr:
     build:
