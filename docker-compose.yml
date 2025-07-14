@@ -3,7 +3,7 @@ version: '3.8' # Docker Compose file format version
 services:
   openplc:
     build:
-      context: ./openplc.dockerfile # OpenPLC Dockerfile for OpenPLC
+      context: ./openplc # Dockerfile folder for OpenPLC
     container_name: openplc-controller # A friendly name for the container
     ports:
       - "502:502"   # Map host port 502 to container port 502 (for Modbus TCP)
@@ -18,7 +18,7 @@ services:
 
   scadabr:
     build:
-      context: ./scadabr.dockerfile # Tells Docker where to find the Dockerfile for ScadaBR
+      context: ./scadabr # Dockerfile folder for ScadaBR
     container_name: scadabr-hmi # A friendly name for the container
     ports:
       - "9090:8080" # Map host port 9090 to container port 8080 (ScadaBR's default Tomcat port)
