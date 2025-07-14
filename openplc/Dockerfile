@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y \
     cmake \
     wget \
     zip \
+    curl \
+    net-tools \
+    iputils-ping \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone OpenPLC repository
