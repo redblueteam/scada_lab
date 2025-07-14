@@ -1,0 +1,35 @@
+version: '3.8' # Docker Compose file format version
+
+services:
+  openplc:
+    build:
+      context: ./openplc_docker_build_folder # Tells Docker where to find the Dockerfile for OpenPLC
+    container_name: openplc-controller # A friendly name for the container
+    ports:
+      - "502:502"   # Map host port 502 to container port 502 (for Modbus TCP)
+      - "8080:8080" # Map host port 8080 to container port 8080 (for OpenPLC Web UI)
+    volumes:
+      # This line is crucial for persistence!
+      # It maps a folder on your VM (`./openplc_data`) to a folder inside the container.
+      # This means your PLC programs and settings will be saved even if the container is removed/recreated.
+      - ./openplc_data:/opt/OpenPLC_v3/data
+    restart: always # Automatically restart the container if it crashes or the VM reboots
+    networks:
+      - scada_net # Connects this container to our custom network
+
+  scadabr:
+    build:
+      context: ./scadabr_docker_build_folder # Tells Docker where to find the Dockerfile for ScadaBR
+    container_name: scadabr-hmi # A friendly name for the container
+    ports:
+      - "9090:8080" # Map host port 9090 to container port 8080 (ScadaBR's default Tomcat port)
+                   # We use 9090 on the host to avoid conflict with OpenPLC's 8080
+    depends_on:
+      - openplc # Ensures OpenPLC starts before ScadaBR
+    restart: always
+    networks:
+      - scada_net # Connects this container to our custom network
+
+networks:
+  scada_net: # Define a custom bridge network for containers to communicate with each other
+    driver: bridge
